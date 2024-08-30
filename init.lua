@@ -172,7 +172,7 @@ vim.keymap.set('v', '<Tab>', '>gv', { noremap = true, silent = true })
 vim.keymap.set('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
 vim.keymap.set('n', "<C-'", '<<', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>y', '"+y', { noremap = true, silent = true })
-
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -328,12 +328,6 @@ require('lazy').setup({
           vim.keymap.set(mode, l, r, opts)
         end
 
-        asdasdas
-
-
-
-
-
         -- Navigation
         map('n', ']c', function()
           if vim.wo.diff then
@@ -379,7 +373,76 @@ require('lazy').setup({
       end,
     },
   },
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    opts = {
+      menu = {
+        width = vim.api.nvim_win_get_width(0) - 4,
+      },
+      settings = {
+        save_on_toggle = true,
+      },
+    },
+    keys = function()
+      local keys = {
+        {
+          '<leader>a',
+          function()
+            require('harpoon'):list():add()
+          end,
+          desc = 'Harpoon File',
+        },
+        {
+          '<C-e>',
+          function()
+            local harpoon = require 'harpoon'
+            harpoon.ui:toggle_quick_menu(harpoon:list())
+          end,
+          desc = 'Harpoon Quick Menu',
+        },
+        {
+          '<C-h>',
+          function()
+            local harpoon = require 'harpoon'
+            harpoon:list():select(1)
+          end,
+        },
+        {
+          '<C-t>',
+          function()
+            local harpoon = require 'harpoon'
+            harpoon:list():select(2)
+          end,
+        },
+        {
+          '<C-s>',
+          function()
+            local harpoon = require 'harpoon'
+            harpoon:list():select(3)
+          end,
+        },
+        {
+          '<C-n>',
+          function()
+            local harpoon = require 'harpoon'
+            harpoon:list():select(4)
+          end,
+        },
+      }
 
+      for i = 1, 5 do
+        table.insert(keys, {
+          '<leader>' .. i,
+          function()
+            require('harpoon'):list():select(i)
+          end,
+          desc = 'Harpoon to File ' .. i,
+        })
+      end
+      return keys
+    end,
+  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -413,7 +476,6 @@ require('lazy').setup({
       }
     end,
   },
-
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
@@ -1048,4 +1110,3 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-
